@@ -4,18 +4,23 @@ import { eq } from "drizzle-orm";
 import crypto from "crypto";
 import { UserId } from "@/use-cases/types";
 import { getAccountByUserId } from "@/data-access/accounts";
+import { get } from "http";
 
 const ITERATIONS = 10000;
 const MAGIC_LINK_TOKEN_TTL = 1000 * 60 * 5; // 5 min
 
 export async function deleteUser(userId: UserId) {
-  await db.delete(users).where(eq(users.id, userId));
+  await db.users.delete({
+    where: { id: userId },
+  })
 }
 
 export async function getUser(userId: UserId) {
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, userId),
-  });
+  const user = await db.users.findFirst({
+    where: {
+      id: userId,
+    }
+  })
 
   return user;
 }
@@ -37,31 +42,31 @@ async function hashPassword(plainTextPassword: string, salt: string) {
 }
 
 export async function createUser(email: string) {
-  const [user] = await db
-    .insert(users)
-    .values({
-      email,
+  const user = await db
+    .users.create({
+      data: {
+        email
+      }
     })
-    .returning();
   return user;
 }
 
 export async function createMagicUser(email: string) {
-  const [user] = await db
-    .insert(users)
-    .values({
-      email,
-      emailVerified: new Date(),
+  const user = await db
+    .users.create({
+      data: {
+        email,
+        emailVerified: new Date(),
+      }
     })
-    .returning();
 
   await db
-    .insert(accounts)
-    .values({
-      userId: user.id,
-      accountType: "email",
+    .accounts.create({
+      data: {
+        userId: user.id,
+        accountType: "email",
+      }
     })
-    .returning();
 
   return user;
 }
@@ -91,30 +96,40 @@ export async function verifyPassword(email: string, plainTextPassword: string) {
 }
 
 export async function getUserByEmail(email: string) {
-  const user = await db.query.users.findFirst({
-    where: eq(users.email, email),
+  const user = await db.users.findFirst({
+    where: {
+      email
+    }
   });
 
   return user;
 }
 
 export async function getMagicUserAccountByEmail(email: string) {
-  const user = await db.query.users.findFirst({
-    where: eq(users.email, email),
-  });
+  const user = await getUserByEmail(email);
 
   return user;
 }
 
 export async function setEmailVerified(userId: UserId) {
   await db
-    .update(users)
-    .set({
-      emailVerified: new Date(),
+    .users.update({
+      where: {
+        id: userId
+      },
+      data: {
+        emailVerified: new Date()
+      }
     })
-    .where(eq(users.id, userId));
 }
 
 export async function updateUser(userId: UserId, updatedUser: Partial<User>) {
-  await db.update(users).set(updatedUser).where(eq(users.id, userId));
+  await db.users.update({
+    where: {
+      id: userId
+    },
+    data: {
+      ...updateUser
+    }
+  })
 }

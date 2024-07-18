@@ -1,12 +1,7 @@
-import * as schema from "./schema";
+import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
+import { PrismaClient } from "@prisma/client";
 
-import { drizzle } from "drizzle-orm/libsql";
-import { createClient } from "@libsql/client";
-import { env } from "@/env";
+export const db = new PrismaClient();
 
-export const client = createClient({
-  url: env.DATABASE_URL!,
-  authToken: env.DB_AUTH_TOKEN!,
-});
+const adapter = new PrismaAdapter(db.session, db.users);
 
-export const db = drizzle(client, { schema });

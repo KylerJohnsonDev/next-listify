@@ -11,31 +11,79 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Users {
   id       BigInt    @id @default(autoincrement())
   email    String    @unique
   emailVerified DateTime? 
-  sessions Session[]
+  sessions session[]
+  accounts accounts[]
+  profile profiles[]
+  resetTokens resetTokens[]
+  verifyEmailTokens verifyEmailTokens[]
+
+  @@map("user")
 }
 
-model Session {
+model session {
   id        String   @id
-  userId    String
+  userId    BigInt
   expiresAt DateTime
 
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
-model Accounts {
+model magicLinks {
   id        BigInt   @id @default(autoincrement())
-  userId    String
+  email   String @unique
+  token     String
+  tokenExpiresAt DateTime
+
+  @@map("magic_links")
+}
+
+model resetTokens {
+  id        BigInt   @id @default(autoincrement())
+  userId    BigInt @unique
+  token     String
+  tokenExpiresAt DateTime
+
+  user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  @@map("reset_tokens")
+}
+
+model verifyEmailTokens {
+  id        BigInt   @id @default(autoincrement())
+  userId    BigInt @unique
+  token     String
+  tokenExpiresAt DateTime
+
+  user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  @@map("verify_email_tokens")
+}
+
+model accounts {
+  id        BigInt   @id @default(autoincrement())
+  userId    BigInt @unique 
   accountType String
+
   githubId String? @unique
   googleId String? @unique
-  password String
-  salt     String
+  password String?
+  salt     String?
 
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model profiles {
+  id        BigInt   @id @default(autoincrement())
+  userId    BigInt @unique
+  displayName String
+  imageId String?
+  image String?
+  bio       String?
+
+  user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  @@map("profile")
 }
 
 
