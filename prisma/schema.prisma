@@ -20,6 +20,8 @@ model user {
   profile profiles[]
   resetTokens resetTokens[]
   verifyEmailTokens verifyEmailTokens[]
+  lists list[] @relation("list_user")
+  list_creator list[] @relation("creator_user")
 }
 
 model session {
@@ -82,6 +84,25 @@ model profiles {
 
   user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
   @@map("profile")
+}
+
+model list {
+  id        Int   @id @default(autoincrement())
+  name      String
+  description String?
+  items     item[]
+  creatorId Int
+
+  list_creator   user     @relation("creator_user", references: [id], fields: [creatorId], onDelete: Cascade)
+  users   user[] @relation("list_user")
+}
+
+model item {
+  id        Int   @id @default(autoincrement())
+  listId    Int
+  text      String
+  isComplete Boolean @default(false)
+  list      list     @relation(references: [id], fields: [listId], onDelete: Cascade)
 }
 
 

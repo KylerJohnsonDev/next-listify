@@ -28,7 +28,7 @@ export async function Header() {
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2 text-xl">
             <Lightbulb />
-            <div className="hidden md:block">APP</div>
+            <div className="hidden md:block">Listify</div>
           </Link>
 
           <div className="flex items-center gap-2">
