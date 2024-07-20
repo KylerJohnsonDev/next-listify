@@ -11,7 +11,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+model user {
   id       Int    @id @default(autoincrement())
   email    String    @unique
   emailVerified DateTime? 
@@ -20,16 +20,14 @@ model Users {
   profile profiles[]
   resetTokens resetTokens[]
   verifyEmailTokens verifyEmailTokens[]
-
-  @@map("user")
 }
 
 model session {
   id        String   @id
-  userId    Int @unique 
+  userId    Int
   expiresAt DateTime
 
-  user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model magicLinks {
@@ -47,7 +45,7 @@ model resetTokens {
   token     String @unique
   tokenExpiresAt DateTime
 
-  user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
   @@map("reset_tokens")
 }
 
@@ -57,7 +55,7 @@ model verifyEmailTokens {
   token     String @unique
   tokenExpiresAt DateTime
 
-  user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
   @@map("verify_email_tokens")
 }
 
@@ -71,7 +69,7 @@ model accounts {
   password String?
   salt     String?
 
-  user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model profiles {
@@ -82,7 +80,7 @@ model profiles {
   image String?
   bio       String?
 
-  user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
   @@map("profile")
 }
 

@@ -16,7 +16,6 @@
     "@libsql/client": "0.6.1",
     "@lucia-auth/adapter-drizzle": "^1.0.7",
     "@lucia-auth/adapter-prisma": "^4.0.1",
-    "@prisma/client": "5.17.0",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-label": "^2.1.0",
@@ -46,6 +45,7 @@
     "zsa-react": "^0.2.0"
   },
   "devDependencies": {
+    "@prisma/client": "5.17.0",
     "@tailwindcss/typography": "0.5.13",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/node": "20.14.0",
@@ -55,10 +55,12 @@
     "esbuild-register": "3.5.0",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.3",
+    "i": "^0.3.7",
+    "pnpm": "^9.5.0",
     "postcss": "8.4.38",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
-    "prisma": "^5.16.2",
+    "prisma": "^5.17.0",
     "tailwindcss": "3.4.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.4.5"

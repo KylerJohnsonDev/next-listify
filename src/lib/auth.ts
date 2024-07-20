@@ -37,6 +37,7 @@ export const validateRequest = async (): Promise<
     };
   }
 
+  console.log('sessionId', sessionId);
   const result = await lucia.validateSession(sessionId);
 
   // next.js throws when you attempt to set cookie when rendering page
@@ -71,13 +72,13 @@ declare module "lucia" {
   }
 }
 
-export const github = new GitHub(
-  env.GITHUB_CLIENT_ID,
-  env.GITHUB_CLIENT_SECRET,
-);
+// export const github = new GitHub(
+//   env.GITHUB_CLIENT_ID,
+//   env.GITHUB_CLIENT_SECRET,
+// );
 
-export const googleAuth = new Google(
-  env.GOOGLE_CLIENT_ID,
-  env.GOOGLE_CLIENT_SECRET,
-  `${env.HOST_NAME}/api/login/google/callback`,
-);
+// export const googleAuth = new Google(
+//   env.GOOGLE_CLIENT_ID,
+//   env.GOOGLE_CLIENT_SECRET,
+//   `${env.HOST_NAME}/api/login/google/callback`,
+// );

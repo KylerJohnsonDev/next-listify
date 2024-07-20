@@ -9,13 +9,13 @@ const ITERATIONS = 10000;
 const MAGIC_LINK_TOKEN_TTL = 1000 * 60 * 5; // 5 min
 
 export async function deleteUser(userId: UserId) {
-  await db.users.delete({
+  await db.user.delete({
     where: { id: userId },
   })
 }
 
 export async function getUser(userId: UserId) {
-  const user = await db.users.findFirst({
+  const user = await db.user.findFirst({
     where: {
       id: userId,
     }
@@ -42,7 +42,7 @@ async function hashPassword(plainTextPassword: string, salt: string) {
 
 export async function createUser(email: string) {
   const user = await db
-    .users.create({
+    .user.create({
       data: {
         email
       }
@@ -52,7 +52,7 @@ export async function createUser(email: string) {
 
 export async function createMagicUser(email: string) {
   const user = await db
-    .users.create({
+    .user.create({
       data: {
         email,
         emailVerified: new Date(),
@@ -95,7 +95,7 @@ export async function verifyPassword(email: string, plainTextPassword: string) {
 }
 
 export async function getUserByEmail(email: string) {
-  const user = await db.users.findFirst({
+  const user = await db.user.findFirst({
     where: {
       email
     }
@@ -112,7 +112,7 @@ export async function getMagicUserAccountByEmail(email: string) {
 
 export async function setEmailVerified(userId: UserId) {
   await db
-    .users.update({
+    .user.update({
       where: {
         id: userId
       },
@@ -123,7 +123,7 @@ export async function setEmailVerified(userId: UserId) {
 }
 
 export async function updateUser(userId: UserId, updatedUser: Partial<User>) {
-  await db.users.update({
+  await db.user.update({
     where: {
       id: userId
     },
