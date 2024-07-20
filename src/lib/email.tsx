@@ -10,6 +10,7 @@ export async function sendEmail(
   subject: string,
   body: ReactNode,
 ) {
+  console.log({emailTo: email, emailFrom: env.EMAIL_FROM})
   const { error } = await resend.emails.send({
     from: env.EMAIL_FROM,
     to: email,

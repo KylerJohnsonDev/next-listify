@@ -4,7 +4,7 @@ export type UserProfile = {
   image: string | null;
 };
 
-export type UserId = bigint;
+export type UserId = number;
 
 export type UserSession = {
   id: UserId;

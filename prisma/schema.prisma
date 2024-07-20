@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Users {
-  id       BigInt    @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   email    String    @unique
   emailVerified DateTime? 
   sessions session[]
@@ -26,14 +26,14 @@ model Users {
 
 model session {
   id        String   @id
-  userId    BigInt @unique 
+  userId    Int @unique 
   expiresAt DateTime
 
   user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model magicLinks {
-  id        BigInt   @id @default(autoincrement())
+  id        Int   @id @default(autoincrement())
   email   String @unique
   token     String @unique
   tokenExpiresAt DateTime
@@ -42,8 +42,8 @@ model magicLinks {
 }
 
 model resetTokens {
-  id        BigInt   @id @default(autoincrement())
-  userId    BigInt @unique
+  id        Int   @id @default(autoincrement())
+  userId    Int @unique
   token     String @unique
   tokenExpiresAt DateTime
 
@@ -52,8 +52,8 @@ model resetTokens {
 }
 
 model verifyEmailTokens {
-  id        BigInt   @id @default(autoincrement())
-  userId    BigInt @unique
+  id        Int   @id @default(autoincrement())
+  userId    Int @unique
   token     String @unique
   tokenExpiresAt DateTime
 
@@ -62,8 +62,8 @@ model verifyEmailTokens {
 }
 
 model accounts {
-  id        BigInt   @id @default(autoincrement())
-  userId    BigInt @unique 
+  id        Int   @id @default(autoincrement())
+  userId    Int @unique 
   accountType String
 
   githubId String? @unique
@@ -75,8 +75,8 @@ model accounts {
 }
 
 model profiles {
-  id        BigInt   @id @default(autoincrement())
-  userId    BigInt @unique
+  id        Int   @id @default(autoincrement())
+  userId    Int @unique
   displayName String?
   imageId String?
   image String?
