@@ -1,10 +1,9 @@
 import { db } from "@/db";
-import { User, accounts, users } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { User } from "@/db/schema";
 import crypto from "crypto";
 import { UserId } from "@/use-cases/types";
 import { getAccountByUserId } from "@/data-access/accounts";
-import { get } from "http";
+
 
 const ITERATIONS = 10000;
 const MAGIC_LINK_TOKEN_TTL = 1000 * 60 * 5; // 5 min

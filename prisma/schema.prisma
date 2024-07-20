@@ -26,7 +26,7 @@ model Users {
 
 model session {
   id        String   @id
-  userId    BigInt
+  userId    BigInt @unique 
   expiresAt DateTime
 
   user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
@@ -35,7 +35,7 @@ model session {
 model magicLinks {
   id        BigInt   @id @default(autoincrement())
   email   String @unique
-  token     String
+  token     String @unique
   tokenExpiresAt DateTime
 
   @@map("magic_links")
@@ -44,7 +44,7 @@ model magicLinks {
 model resetTokens {
   id        BigInt   @id @default(autoincrement())
   userId    BigInt @unique
-  token     String
+  token     String @unique
   tokenExpiresAt DateTime
 
   user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
@@ -54,7 +54,7 @@ model resetTokens {
 model verifyEmailTokens {
   id        BigInt   @id @default(autoincrement())
   userId    BigInt @unique
-  token     String
+  token     String @unique
   tokenExpiresAt DateTime
 
   user      Users     @relation(references: [id], fields: [userId], onDelete: Cascade)
@@ -77,7 +77,7 @@ model accounts {
 model profiles {
   id        BigInt   @id @default(autoincrement())
   userId    BigInt @unique
-  displayName String
+  displayName String?
   imageId String?
   image String?
   bio       String?

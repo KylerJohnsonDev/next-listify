@@ -1,22 +1,25 @@
 import { db } from "@/db";
-import { Profile, profiles } from "@/db/schema";
+import { Profile } from "@/db/schema";
 import { UserId } from "@/use-cases/types";
-import { eq } from "drizzle-orm";
 
 export async function createProfile(
   userId: UserId,
   displayName: string,
   image?: string,
 ) {
-  const [profile] = await db
-    .insert(profiles)
-    .values({
+
+  const profile = await db.profiles.upsert({
+    create: {
       userId,
-      image,
       displayName,
-    })
-    .onConflictDoNothing()
-    .returning();
+      image
+    },
+    update: {},
+    where: {
+      userId
+    }
+  })
+
   return profile;
 }
 
@@ -24,16 +27,20 @@ export async function updateProfile(
   userId: UserId,
   updateProfile: Partial<Profile>,
 ) {
-  await db
-    .update(profiles)
-    .set(updateProfile)
-    .where(eq(profiles.userId, userId));
+  await db.profiles.update({
+    data: {...updateProfile},
+    where: {
+      userId, 
+    }
+  })
 }
 
 export async function getProfile(userId: UserId) {
-  const profile = await db.query.profiles.findFirst({
-    where: eq(profiles.userId, userId),
-  });
+  const profile = await db.profiles.findFirst({
+    where: {
+      userId
+    }
+  })
 
   return profile;
 }

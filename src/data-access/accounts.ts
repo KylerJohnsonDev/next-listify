@@ -1,7 +1,5 @@
 import { db } from "@/db";
-import { accounts } from "@/db/schema";
 import { UserId } from "@/use-cases/types";
-import { and, eq } from "drizzle-orm";
 import crypto from "crypto";
 
 const ITERATIONS = 10000;
@@ -76,7 +74,7 @@ export async function updatePassword(
 ) {
   const salt = crypto.randomBytes(128).toString("base64");
   const hash = await hashPassword(password, salt);
-  await db.accounts
+  await trx.accounts
     .update({
       where: {
         userId,
