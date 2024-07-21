@@ -4,6 +4,7 @@ import { ListDetailsForm } from "@/app/lists/[id]/list-details-form";
 import { revalidatePath } from "next/cache";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ItemList } from "@/app/lists/[id]/item-list";
+import { toggleItemComplete } from "@/data-access/item";
 
 type ListDetailsPageParams = {
   params: {
@@ -21,7 +22,7 @@ export default async function ListDetailPage({  params: { id } }: ListDetailsPag
     revalidatePath(`/list/${id}`)
   }
 
-  async function toggleItemComplete(id: number, isComplete: boolean) {
+  async function toggleComplete(id: number, isComplete: boolean) {
     'use server'
     await toggleItemComplete(id, isComplete)
     revalidatePath(`/list/${id}`)
@@ -68,7 +69,7 @@ export default async function ListDetailPage({  params: { id } }: ListDetailsPag
                 <CardTitle className="text-2xl">List Items</CardTitle>
               </CardHeader>
               <CardContent>
-                <ItemList items={list.items} listId={list.id} toggleItemComplete={toggleItemComplete}  />
+                <ItemList items={list.items} listId={list.id} toggleItemComplete={toggleComplete}  />
               </CardContent>
             </Card>
 

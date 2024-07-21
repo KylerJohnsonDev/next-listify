@@ -2,6 +2,7 @@
 
 import { item } from "@prisma/client";
 import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 
 type ListItemProps = {
   item: item;
@@ -21,9 +22,11 @@ export function ListItem ({ item, toggleComplete, deleteItem }: ListItemProps) {
   }
 
   return (
-    <div className="flex justify-between items-center py-4 border-b-[1px]" onClick={() => handleClick(item)}>
-      <span className={item.isComplete ? 'line-through' : ''}>{item.text}</span>
-      <Button variant="destructive" className="opacity-70" type="button" onClick={(e) => handleDelete(e)}>Delete</Button>
+    <div className="flex justify-between items-center py-2 border-b-[1px]" onClick={() => handleClick(item)}>
+      <span className={item.isComplete ? 'line-through opacity-30' : ''}>{item.text}</span>
+      <Button variant="destructive" className="opacity-70" type="button" onClick={(e) => handleDelete(e)}>
+        <Trash2 />
+      </Button>
     </div>
   )
 }
