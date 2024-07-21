@@ -38,8 +38,8 @@ export async function Header() {
                 asChild
                 className="flex items-center justify-center gap-2"
               >
-                <Link href={"/dashboard"}>
-                  <LayoutDashboard className="h-4 w-4" /> Dashboard
+                <Link href={"/lists"}>
+                  <LayoutDashboard className="h-4 w-4" /> Lists
                 </Link>
               </Button>
             )}

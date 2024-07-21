@@ -18,7 +18,7 @@ export function MenuButton() {
       <DropdownMenuContent className="space-y-2">
         <DropdownMenuItem asChild>
           <Link
-            href="/dashboard"
+            href="/lists"
             className="flex cursor-pointer items-center gap-2"
           >
             <UsersIcon className="h-4 w-4" /> Your Groups

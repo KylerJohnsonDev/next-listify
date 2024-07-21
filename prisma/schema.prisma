@@ -12,16 +12,16 @@ datasource db {
 }
 
 model user {
-  id       Int    @id @default(autoincrement())
-  email    String    @unique
-  emailVerified DateTime? 
-  sessions session[]
-  accounts accounts[]
-  profile profiles[]
-  resetTokens resetTokens[]
+  id                Int                 @id @default(autoincrement())
+  email             String              @unique
+  emailVerified     DateTime?
+  sessions          session[]
+  accounts          accounts[]
+  profile           profiles[]
+  resetTokens       resetTokens[]
   verifyEmailTokens verifyEmailTokens[]
-  lists list[] @relation("list_user")
-  list_creator list[] @relation("creator_user")
+  lists             list[]              @relation("list_user")
+  list_creator      list[]              @relation("creator_user")
 }
 
 model session {
@@ -29,41 +29,43 @@ model session {
   userId    Int
   expiresAt DateTime
 
-  user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user user @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model magicLinks {
-  id        Int   @id @default(autoincrement())
-  email   String @unique
-  token     String @unique
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  token          String   @unique
   tokenExpiresAt DateTime
 
   @@map("magic_links")
 }
 
 model resetTokens {
-  id        Int   @id @default(autoincrement())
-  userId    Int @unique
-  token     String @unique
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  token          String   @unique
   tokenExpiresAt DateTime
 
-  user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user user @relation(references: [id], fields: [userId], onDelete: Cascade)
+
   @@map("reset_tokens")
 }
 
 model verifyEmailTokens {
-  id        Int   @id @default(autoincrement())
-  userId    Int @unique
-  token     String @unique
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  token          String   @unique
   tokenExpiresAt DateTime
 
-  user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user user @relation(references: [id], fields: [userId], onDelete: Cascade)
+
   @@map("verify_email_tokens")
 }
 
 model accounts {
-  id        Int   @id @default(autoincrement())
-  userId    Int @unique 
+  id          Int    @id @default(autoincrement())
+  userId      Int    @unique
   accountType String
 
   githubId String? @unique
@@ -71,38 +73,37 @@ model accounts {
   password String?
   salt     String?
 
-  user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user user @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model profiles {
-  id        Int   @id @default(autoincrement())
-  userId    Int @unique
+  id          Int     @id @default(autoincrement())
+  userId      Int     @unique
   displayName String?
-  imageId String?
-  image String?
-  bio       String?
+  imageId     String?
+  image       String?
+  bio         String?
 
-  user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user user @relation(references: [id], fields: [userId], onDelete: Cascade)
+
   @@map("profile")
 }
 
 model list {
-  id        Int   @id @default(autoincrement())
-  name      String
-  description String?
-  items     item[]
-  creatorId Int
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String @default("")
+  items       item[]
+  creatorId   Int
 
-  list_creator   user     @relation("creator_user", references: [id], fields: [creatorId], onDelete: Cascade)
-  users   user[] @relation("list_user")
+  list_creator user   @relation("creator_user", references: [id], fields: [creatorId], onDelete: Cascade)
+  users        user[] @relation("list_user")
 }
 
 model item {
-  id        Int   @id @default(autoincrement())
-  listId    Int
-  text      String
+  id         Int     @id @default(autoincrement())
+  listId     Int
+  text       String
   isComplete Boolean @default(false)
-  list      list     @relation(references: [id], fields: [listId], onDelete: Cascade)
+  list       list    @relation(references: [id], fields: [listId], onDelete: Cascade)
 }
-
-
