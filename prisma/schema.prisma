@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 // https://www.prisma.io/docs/getting-started/quickstart
@@ -12,16 +13,18 @@ datasource db {
 }
 
 model user {
-  id                Int                 @id @default(autoincrement())
-  email             String              @unique
-  emailVerified     DateTime?
-  sessions          Session[]
-  accounts          Account[]
-  profile           Profile[]
-  resetTokens       ResetTokens[]
-  verifyEmailTokens VerifyEmailTokens[]
-  listUsers         ListUsers[]
-  lists             List[]
+  id                   Int                 @id @default(autoincrement())
+  email                String              @unique
+  emailVerified        DateTime?
+  sessions             Session[]
+  accounts             Account[]
+  profile              Profile[]
+  resetTokens          ResetTokens[]
+  verifyEmailTokens    VerifyEmailTokens[]
+  listUsers            ListUsers[]
+  lists                List[]
+  notificationForUser  Notification[]      @relation("notification_for_user")
+  notificationFromUser Notification[]      @relation("notification_from_user")
 }
 
 model Session {
@@ -121,4 +124,25 @@ model Item {
   text       String
   isComplete Boolean @default(false)
   list       List    @relation(references: [id], fields: [listId], onDelete: Cascade)
+}
+
+model NotificationType {
+  id   Int    @id @default(autoincrement())
+  type String @unique
+
+  notification Notification[]
+}
+
+model Notification {
+  id         Int     @id @default(autoincrement())
+  message    String
+  typeId     Int
+  forUserId  Int
+  fromUserId Int
+  resourceId Int
+  isActive   Boolean @default(true)
+
+  type     NotificationType @relation(references: [id], fields: [typeId])
+  forUser  user             @relation("notification_for_user", references: [id], fields: [forUserId])
+  fromUser user             @relation("notification_from_user", references: [id], fields: [fromUserId])
 }
