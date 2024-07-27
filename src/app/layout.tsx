@@ -22,12 +22,12 @@ const libre_franklin = Libre_Franklin({
 });
 
 export const metadata: Metadata = {
-  title: "WDC Template",
+  title: "Listify",
   icons: [
     { rel: "icon", type: "image/png", sizes: "48x48", url: "/favicon.ico" },
   ],
-  keywords: "yolo",
-  description: "A simple next.js template including drizzle and lucia auth",
+  keywords: ["Todo", "Productivity"],
+  description: "A simple list app. Create lists and add collaborators.",
 };
 
 export default async function RootLayout({

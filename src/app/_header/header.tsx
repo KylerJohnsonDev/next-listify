@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LayoutDashboard, Lightbulb, Loader2Icon, LogOut } from "lucide-react";
+import { Bell, LayoutDashboard, Lightbulb, Loader2Icon, LogOut } from "lucide-react";
 import { getUserProfileUseCase } from "@/use-cases/users";
 import { ModeToggle } from "./mode-toggle";
 import { MenuButton } from "./menu-button";
@@ -40,6 +40,19 @@ export async function Header() {
               >
                 <Link href={"/lists"}>
                   <LayoutDashboard className="h-4 w-4" /> Lists
+                </Link>
+              </Button>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {user && (
+              <Button
+                variant={"link"}
+                asChild
+                className="flex items-center justify-center gap-2"
+              >
+                <Link href={"/notifications"}>
+                  <Bell className="h-4 w-4" /> Notifications
                 </Link>
               </Button>
             )}
