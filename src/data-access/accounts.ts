@@ -24,7 +24,7 @@ export async function createAccount(userId: UserId, password: string) {
   const salt = crypto.randomBytes(128).toString("base64");
   const hash = await hashPassword(password, salt);
   const account = await db
-    .accounts.create({
+    .account.create({
       data: {
         userId,
         accountType: "email",
@@ -37,7 +37,7 @@ export async function createAccount(userId: UserId, password: string) {
 
 export async function createAccountViaGithub(userId: UserId, githubId: string) {
   await db
-    .accounts.create({
+    .account.create({
       data: {
         userId: userId,
         accountType: "github",
@@ -48,7 +48,7 @@ export async function createAccountViaGithub(userId: UserId, githubId: string) {
 
 export async function createAccountViaGoogle(userId: UserId, googleId: string) {
   await db
-    .accounts.create({
+    .account.create({
       data: {
         userId: userId,
         accountType: "google",
@@ -58,7 +58,7 @@ export async function createAccountViaGoogle(userId: UserId, googleId: string) {
 }
 
 export async function getAccountByUserId(userId: UserId) {
-  const account = await db.accounts.findFirst({
+  const account = await db.account.findFirst({
     where: {
       userId
     }
@@ -74,7 +74,7 @@ export async function updatePassword(
 ) {
   const salt = crypto.randomBytes(128).toString("base64");
   const hash = await hashPassword(password, salt);
-  await trx.accounts
+  await trx.account
     .update({
       where: {
         userId,
@@ -88,7 +88,7 @@ export async function updatePassword(
 }
 
 export async function getAccountByGoogleId(googleId: string) {
-  return await db.accounts.findFirst({
+  return db.account.findFirst({
     where: {
       googleId
     }
@@ -96,7 +96,7 @@ export async function getAccountByGoogleId(googleId: string) {
 }
 
 export async function getAccountByGithubId(githubId: string) {
-  return await db.accounts.findFirst({
+  return db.account.findFirst({
     where: {
       githubId
     }

@@ -8,7 +8,7 @@ export async function createProfile(
   image?: string,
 ) {
 
-  const profile = await db.profiles.upsert({
+  const profile = await db.profile.upsert({
     create: {
       userId,
       displayName,
@@ -27,7 +27,7 @@ export async function updateProfile(
   userId: UserId,
   updateProfile: Partial<Profile>,
 ) {
-  await db.profiles.update({
+  await db.profile.update({
     data: {...updateProfile},
     where: {
       userId, 
@@ -36,7 +36,7 @@ export async function updateProfile(
 }
 
 export async function getProfile(userId: UserId) {
-  const profile = await db.profiles.findFirst({
+  const profile = await db.profile.findFirst({
     where: {
       userId
     }

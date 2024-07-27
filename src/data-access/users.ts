@@ -60,7 +60,7 @@ export async function createMagicUser(email: string) {
     })
 
   await db
-    .accounts.create({
+    .account.create({
       data: {
         userId: user.id,
         accountType: "email",

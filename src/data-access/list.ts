@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { item } from "@prisma/client";
+import { List } from "@prisma/client";
 
 
 export async function createList(
@@ -18,54 +18,62 @@ export async function createList(
 }
 
 export async function getListByListId(listId: number) {
-  return await db.list.findFirst({
+  return db.list.findFirst({
     where: {
       id: listId
     },
     include: {
       items: true,
-      users: true
+      listUsers: {
+        include: {
+          user: true
+        }
+      }
     }
   })
 }
 
 export async function getListsByUserId(userId: number) {
-  return await db.list.findMany({
+  return db.list.findMany({
     where: {
       creatorId: userId
     }
   })
 }
 
-export async function getSharedLists(userId: number) {
-  return await db.list.findMany({
+export async function getSharedLists(userId: number): Promise<List[]> {
+  const listUsers = await db.listUsers.findMany({
+    where: { userId },
     include: {
-      users: {
-        where: {
-          id: userId
-        }
-      }
+      list: true
     }
+  })
+
+  return listUsers.map(listUser => {
+    return listUser.list
   })
 }
 
 export async function addUserToList(userId: number, listId: number) {
-  return await db.list.update({
+  const listUsers = await db.listUsers.findMany({
     where: {
-      id: listId
-    },
+      userId,
+      listId
+    }
+  })
+  if(listUsers.length > 0) {
+    throw Error("User has already been added to this list")
+  }
+  return db.listUsers.create({
     data: {
-      users: {
-        connect: {
-          id: userId
-        }
-      }
+      listId,
+      userId,
     }
   })
 }
 
 export async function updateList(listId: number, name: string, description?: string) {
-  return await db.list.update({
+  return db.list.update({
     where: {
       id: listId
     },
@@ -77,7 +85,7 @@ export async function updateList(listId: number, name: string, description?: str
 }
 
 export async function deleteList(listId: number) {
-  return await db.list.delete({ 
+  return db.list.delete({
     where: { 
       id: listId 
     }

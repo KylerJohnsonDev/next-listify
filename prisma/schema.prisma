@@ -15,24 +15,26 @@ model user {
   id                Int                 @id @default(autoincrement())
   email             String              @unique
   emailVerified     DateTime?
-  sessions          session[]
-  accounts          accounts[]
-  profile           profiles[]
-  resetTokens       resetTokens[]
-  verifyEmailTokens verifyEmailTokens[]
-  lists             list[]              @relation("list_user")
-  list_creator      list[]              @relation("creator_user")
+  sessions          Session[]
+  accounts          Account[]
+  profile           Profile[]
+  resetTokens       ResetTokens[]
+  verifyEmailTokens VerifyEmailTokens[]
+  listUsers         ListUsers[]
+  lists             List[]
 }
 
-model session {
+model Session {
   id        String   @id
   userId    Int
   expiresAt DateTime
 
   user user @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@map("session")
 }
 
-model magicLinks {
+model MagicLinks {
   id             Int      @id @default(autoincrement())
   email          String   @unique
   token          String   @unique
@@ -41,7 +43,7 @@ model magicLinks {
   @@map("magic_links")
 }
 
-model resetTokens {
+model ResetTokens {
   id             Int      @id @default(autoincrement())
   userId         Int      @unique
   token          String   @unique
@@ -52,7 +54,7 @@ model resetTokens {
   @@map("reset_tokens")
 }
 
-model verifyEmailTokens {
+model VerifyEmailTokens {
   id             Int      @id @default(autoincrement())
   userId         Int      @unique
   token          String   @unique
@@ -63,7 +65,7 @@ model verifyEmailTokens {
   @@map("verify_email_tokens")
 }
 
-model accounts {
+model Account {
   id          Int    @id @default(autoincrement())
   userId      Int    @unique
   accountType String
@@ -74,9 +76,11 @@ model accounts {
   salt     String?
 
   user user @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@map("accounts")
 }
 
-model profiles {
+model Profile {
   id          Int     @id @default(autoincrement())
   userId      Int     @unique
   displayName String?
@@ -89,21 +93,32 @@ model profiles {
   @@map("profile")
 }
 
-model list {
-  id          Int    @id @default(autoincrement())
+model List {
+  id          Int         @id @default(autoincrement())
   name        String
-  description String @default("")
-  items       item[]
+  description String      @default("")
+  items       Item[]
   creatorId   Int
-
-  list_creator user   @relation("creator_user", references: [id], fields: [creatorId], onDelete: Cascade)
-  users        user[] @relation("list_user")
+  createdBy   user        @relation(references: [id], fields: [creatorId], onDelete: Cascade)
+  listUsers   ListUsers[]
+  userId      Int?
 }
 
-model item {
+model ListUsers {
+  id     Int @id @default(autoincrement())
+  listId Int
+  userId Int
+
+  list List @relation(fields: [listId], references: [id])
+  user user @relation(fields: [userId], references: [id])
+
+  @@index([listId, userId])
+}
+
+model Item {
   id         Int     @id @default(autoincrement())
   listId     Int
   text       String
   isComplete Boolean @default(false)
-  list       list    @relation(references: [id], fields: [listId], onDelete: Cascade)
+  list       List    @relation(references: [id], fields: [listId], onDelete: Cascade)
 }
