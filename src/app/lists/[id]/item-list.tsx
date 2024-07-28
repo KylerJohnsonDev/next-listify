@@ -1,4 +1,4 @@
-import { item } from "@prisma/client";
+import { Item } from "@prisma/client";
 import { ListItem } from "@/components/list-item";
 import React from "react";
 import { AddItemForm } from "@/app/lists/[id]/add-item-form";
@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 
 type ItemListProps = {
   listId: number;
-  items: item[]
+  items: Item[]
   toggleItemComplete: (listId: number, isComplete: boolean) => Promise<void>
 }
 

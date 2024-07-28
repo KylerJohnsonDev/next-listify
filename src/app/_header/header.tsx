@@ -16,11 +16,13 @@ import { getUserProfileUseCase } from "@/use-cases/users";
 import { ModeToggle } from "./mode-toggle";
 import { MenuButton } from "./menu-button";
 import { UserId } from "@/types";
+import { getNotificationsByUserId } from "@/data-access/notifications";
 
 const profilerLoader = cache(getUserProfileUseCase);
 
 export async function Header() {
   const user = await getCurrentUser();
+  const notifications = user ? await getNotificationsByUserId(user!.id) : []
 
   return (
     <div className="border-b py-4">
@@ -52,7 +54,7 @@ export async function Header() {
                 className="flex items-center justify-center gap-2"
               >
                 <Link href={"/notifications"}>
-                  <Bell className="h-4 w-4" /> Notifications
+                  <Bell className="h-4 w-4" /> Notifications { notifications.length > 0 ? `(${notifications.length})` : '' }
                 </Link>
               </Button>
             )}

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { handler } from "tailwindcss-animate";
 import { QueryClient, useMutation } from "@tanstack/react-query";
-import { list } from '@prisma/client'
+import { List } from '@prisma/client'
 
 export default function CreateListPage() {
 
@@ -18,7 +18,7 @@ export default function CreateListPage() {
   const [isDisabledSubmit, setIsDisabledSubmit] = useState(true);
 
   const mutation = useMutation({
-    mutationFn: async (newList: Partial<list>) =>  {
+    mutationFn: async (newList: Partial<List>) =>  {
       const promise = await fetch("/api/lists/", { method: "POST", body: JSON.stringify(newList) })
       const data = await promise.json();
       router.push(`/lists/${data.id}`);

@@ -22,7 +22,7 @@ const formSchema = z.object({
 })
 
 
-export function listForm({ id, name, description, updateListDetails }: ListDetailsFormProps) {
+export function ListForm({ id, name, description, updateListDetails }: ListDetailsFormProps) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,7 +44,7 @@ export function listForm({ id, name, description, updateListDetails }: ListDetai
 
 export function ListDetailsForm({id, name, description, updateListDetails}: ListDetailsFormProps) {
 
-  const {form, onSubmit } = listForm({ id, name, description, updateListDetails })
+  const {form, onSubmit } = ListForm({ id, name, description, updateListDetails })
 
   return (
     <Form {...form}>

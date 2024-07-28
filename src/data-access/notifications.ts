@@ -4,7 +4,7 @@ import { getProfile } from "@/data-access/profiles";
 import { getUser } from "@/data-access/users";
 
 export enum NOTIFICATION_TYPE {
-  listInvitation = 0
+  listInvitation = 1
 }
 
 export async function createNotification(
@@ -55,7 +55,14 @@ export async function acceptNotification(notificationId: number) {
       listId: notification.resourceId
     }
   })
-
+  await db.notification.update({
+    data: {
+      isActive: false
+    },
+    where: {
+      id: notificationId
+    }
+  })
 }
 
 export async function deleteNotification(notificationId: number) {
@@ -65,5 +72,14 @@ export async function deleteNotification(notificationId: number) {
       isActive: false
     }
   })
+}
+
+export async function createAddCollaboratorNotification(emailAddress: string, listOwnerUserId: number, listId: number) {
+  const user = await db.user.findUnique({
+    where: { email: emailAddress }
+  })
+  if(!user) throw new Error("User not found.")
+
+  await createNotification(listOwnerUserId, user.id, listId)
 }
 

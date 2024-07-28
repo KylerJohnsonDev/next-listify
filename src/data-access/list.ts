@@ -26,7 +26,11 @@ export async function getListByListId(listId: number) {
       items: true,
       listUsers: {
         include: {
-          user: true
+          user: {
+            include: {
+              profile: true
+            }
+          }
         }
       }
     }

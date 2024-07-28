@@ -5,6 +5,10 @@ import { revalidatePath } from "next/cache";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ItemList } from "@/app/lists/[id]/item-list";
 import { toggleItemComplete } from "@/data-access/item";
+import CollaboratorForm from "@/app/lists/[id]/collaborator-form";
+import { getCurrentUser } from "@/lib/session";
+import { redirect } from "next/navigation";
+import { createAddCollaboratorNotification } from "@/data-access/notifications";
 
 type ListDetailsPageParams = {
   params: {
@@ -13,6 +17,9 @@ type ListDetailsPageParams = {
 }
 
 export default async function ListDetailPage({  params: { id } }: ListDetailsPageParams) {
+
+  const user = await getCurrentUser();
+  if (!user) redirect("/sign-in");
 
   const list = await getListByListId(Number(id));
 
@@ -28,6 +35,12 @@ export default async function ListDetailPage({  params: { id } }: ListDetailsPag
     revalidatePath(`/list/${id}`)
   }
 
+  async function addCollaborator(emailAddress: string) {
+    'use server'
+    await createAddCollaboratorNotification(emailAddress, user!.id, Number(id))
+    revalidatePath(`/list/${id}`);
+  }
+
   if(!list) {
     return (
       <>
@@ -35,6 +48,8 @@ export default async function ListDetailPage({  params: { id } }: ListDetailsPag
       </>
     )
   }
+
+  const collaborators = list?.listUsers.map(listUser => listUser.user)
 
   return (
     <>
@@ -58,8 +73,19 @@ export default async function ListDetailPage({  params: { id } }: ListDetailsPag
                 <CardHeader>
                   <CardTitle className="text-2xl">Collaborators</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  No collaborators have been added to this list.
+                <CardContent className="flex flex-col gap-4">
+                  {
+                    collaborators.length > 0 ? (
+                      <>
+                        { collaborators.map(user => (
+                          <span key={user.email}>{ user.profile[0].displayName ?? user.email }</span>
+                        ))}
+                      </>
+                    ) : (
+                      <span>No collaborators have been added to this list.</span>
+                    )
+                  }
+                  <CollaboratorForm addCollaborator={addCollaborator} />
                 </CardContent>
               </Card>
             </div>

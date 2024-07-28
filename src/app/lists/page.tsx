@@ -32,7 +32,7 @@ export default async function ListsPage() {
               {
                 userLists?.length > 0 ?
                   userLists.map((list) => (
-                    <Link href={`/lists/${list.id}`} className="w-full md:w-[25%]">
+                    <Link key={list.id} href={`/lists/${list.id}`} className="w-full md:w-[25%]">
                       <Card className="py-8 text-center">
                         {list.name}
                       </Card>
@@ -46,7 +46,7 @@ export default async function ListsPage() {
               {
                 sharedLists?.length > 0 ?
                   sharedLists.map((list) => (
-                    <Link href={`/lists/${list.id}`} className="w-full md:w-[25%]">
+                    <Link key={list.id} href={`/lists/${list.id}`} className="w-full md:w-[25%]">
                       <Card className="py-8 text-center">
                         {list.name}
                       </Card>

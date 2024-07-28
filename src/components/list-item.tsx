@@ -1,18 +1,18 @@
 "use client"
 
-import { item } from "@prisma/client";
+import { Item } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 
 type ListItemProps = {
-  item: item;
+  item: Item;
   toggleComplete: (id: number, isComplete: boolean) => Promise<void>;
   deleteItem: (itemId: number) => Promise<void>;
 }
 
 export function ListItem ({ item, toggleComplete, deleteItem }: ListItemProps) {
 
-  async function handleClick(item: item) {
+  async function handleClick(item: Item) {
     await toggleComplete(item.id, !item.isComplete)
   }
 
